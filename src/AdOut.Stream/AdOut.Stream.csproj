@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AdOut.Stream.Core\AdOut.Stream.Core.csproj" />
+    <ProjectReference Include="..\AdOut.Stream.Model\AdOut.Stream.Model.csproj" />
+  </ItemGroup>
+
+</Project>
