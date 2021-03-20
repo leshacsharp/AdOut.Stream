@@ -3,11 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdOut.Stream", "AdOut.Stream\AdOut.Stream.csproj", "{36FE1BCE-C9DB-4391-B370-A65016701E4F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdOut.Stream", "AdOut.Stream\AdOut.Stream.csproj", "{36FE1BCE-C9DB-4391-B370-A65016701E4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdOut.Stream.Model", "AdOut.Stream.Model\AdOut.Stream.Model.csproj", "{CF208FC3-AFAE-4FE3-A00F-91EA7324E592}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdOut.Stream.Model", "AdOut.Stream.Model\AdOut.Stream.Model.csproj", "{CF208FC3-AFAE-4FE3-A00F-91EA7324E592}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdOut.Stream.Core", "AdOut.Stream.Core\AdOut.Stream.Core.csproj", "{DD8A1BD6-1D91-4631-87CE-B3FB2893BB1B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdOut.Stream.Core", "AdOut.Stream.Core\AdOut.Stream.Core.csproj", "{DD8A1BD6-1D91-4631-87CE-B3FB2893BB1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{54CA2A8F-5A7A-4136-B70B-1C6E347DE3F6}"
+	ProjectSection(SolutionItems) = preProject
+		nuget.config = nuget.config
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

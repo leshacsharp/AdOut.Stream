@@ -1,3 +1,7 @@
+using AdOut.Extensions.Communication;
+using AdOut.Extensions.Infrastructure;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +16,31 @@ namespace AdOut.Stream
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
-        {
+        static async Task Main()
+        { 
+            var host = CreateHostBuilder().Build();
+            using var scope = host.Services.CreateScope();
+            var initializationTasks = scope.ServiceProvider.GetServices<IInitialization>();
+
+            foreach (var t in initializationTasks)
+            {
+                await t.InitAsync();
+            }
+
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(host.Services.GetRequiredService<Form1>());
         }
+
+        private static IHostBuilder CreateHostBuilder() =>
+           Host.CreateDefaultBuilder()
+               .UseConsoleLifetime()
+               .ConfigureServices((hostContext, services) =>
+               {
+                   services.AddMessageBrokerServices();
+                   services.Configure<RabbitConfig>(hostContext.Configuration.GetSection(nameof(RabbitConfig)));
+                   services.AddTransient<Form1>();
+               });
     }
 }
