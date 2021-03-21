@@ -1,7 +1,11 @@
 using AdOut.Extensions.Communication;
 using AdOut.Extensions.Infrastructure;
+using AdOut.Stream.Core.Consumers;
+using AdOut.Stream.Core.Services;
+using AdOut.Stream.Model.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,6 +43,8 @@ namespace AdOut.Stream
                .ConfigureServices((hostContext, services) =>
                {
                    services.AddMessageBrokerServices();
+                   services.AddSingleton<IPlanHandledConsumer, PlanHandledConsumer>();
+                   services.AddScoped<IInitialization, PlanHandledQueueInitialization>();
                    services.Configure<RabbitConfig>(hostContext.Configuration.GetSection(nameof(RabbitConfig)));
                    services.AddTransient<Form1>();
                });
