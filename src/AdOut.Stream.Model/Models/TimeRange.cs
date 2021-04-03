@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdOut.Stream.Model.Classes
+namespace AdOut.Stream.Model.Models
 {
     public class TimeRange
     {

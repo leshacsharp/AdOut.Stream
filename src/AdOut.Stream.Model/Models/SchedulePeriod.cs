@@ -1,5 +1,4 @@
-﻿using AdOut.Stream.Model.Classes;
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace AdOut.Stream.Model.Models
