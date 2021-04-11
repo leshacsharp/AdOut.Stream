@@ -2,9 +2,9 @@
 
 namespace AdOut.Stream.Model.Models
 {
-    public class TimeAdBlock
+    public class TimeBlock
     {
-        public TimeAdBlock(string title, string path, TimeSpan start, TimeSpan end, bool gap = false)
+        public TimeBlock(string title, string path, TimeSpan start, TimeSpan end, bool gap = false)
         {
             Title = title;
             Path = path;

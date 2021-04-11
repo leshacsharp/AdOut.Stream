@@ -6,7 +6,7 @@ namespace AdOut.Stream.Model.Interfaces
 {
     public interface ITimeLineService
     {
-        List<TimeAdBlock> GenerateTimeLine(List<PlanTime> plans, DateTime start, DateTime end);
-        List<TimeAdBlock> GenerateTimeAdBlocks(PlanTime plan, DateTime start, DateTime end);
+        List<TimeBlock> GenerateTimeLine(List<PlanTime> plans, DateTime day);
+        List<TimeBlock> MergeTimeLine(List<TimeBlock> timeLine, PlanTime newPlan, DateTime day, TimeSpan startTime);
     }
 }

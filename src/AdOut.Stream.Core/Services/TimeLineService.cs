@@ -16,58 +16,97 @@ namespace AdOut.Stream.Core.Services
             _config = options.Value;
         }
 
-        public List<TimeAdBlock> GenerateTimeLine(List<PlanTime> plans, DateTime start, DateTime end)
+        public List<TimeBlock> GenerateTimeLine(List<PlanTime> plans, DateTime day)
         {
-            if (end > start)
-            {
-                throw new ArgumentException("End can't be less start", nameof(end));
-            }
-             
-            var timeBlocks = plans.SelectMany(p => GenerateTimeAdBlocks(p, start, end))
-                                  .OrderBy(tb => tb.Start)
+            var timeBlocks = plans.SelectMany(p => GenerateTimeAdBlocks(p, day))
+                                  .OrderBy(b => b.Start)
                                   .ToList();
 
             if (!timeBlocks.Any())
             {
-                var gapForAllTime = new TimeAdBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.StartWorking, _config.EndWorking, true);
-                return new List<TimeAdBlock>() { gapForAllTime };
+                var gapForAllTime = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.StartWorking, _config.EndWorking, true);
+                return new List<TimeBlock>() { gapForAllTime };
             }
 
-            var timeLine = new List<TimeAdBlock>();
+            var timeLine = new List<TimeBlock>();
             var firstTimeBlock = timeBlocks.First();
             var lastTimeBlock = timeBlocks.Last();
 
             if (firstTimeBlock.Start != _config.StartWorking)
             {
-                var gapForStart = new TimeAdBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.StartWorking, firstTimeBlock.Start, true);
+                var gapForStart = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.StartWorking, firstTimeBlock.Start, true);
                 timeLine.Add(gapForStart);
             }
 
-            TimeAdBlock previousBlock = null;
-            foreach (var currentBlock in timeBlocks)
-            {
-                if (previousBlock != null && previousBlock.End != currentBlock.Start)
-                {
-                    var gap = new TimeAdBlock(_config.DefaultAdTitle, _config.DefaultAdPath, previousBlock.End, currentBlock.Start, true);
-                    timeLine.Add(gap);
-                }
-                timeLine.Add(currentBlock);
-                previousBlock = currentBlock;
-            }
+            var timeBlocksWithGaps = IncludeGapsBetweenTimeBlocks(timeBlocks);
+            timeLine.AddRange(timeBlocksWithGaps);
 
             if (lastTimeBlock.End != _config.EndWorking)
             {
-                var gapForEnd = new TimeAdBlock(_config.DefaultAdTitle, _config.DefaultAdPath, lastTimeBlock.End, _config.EndWorking, true);
+                var gapForEnd = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, lastTimeBlock.End, _config.EndWorking, true);
                 timeLine.Add(gapForEnd);
             }
 
             return timeLine;
         }
 
-        public List<TimeAdBlock> GenerateTimeAdBlocks(PlanTime plan, DateTime start, DateTime end)
+        //for not gaps the startTime is CurrentTimeBlock.End, for gaps the startTimec is a day local time
+        public List<TimeBlock> MergeTimeLine(List<TimeBlock> timeLine, PlanTime newPlan, DateTime day, TimeSpan startTime)
         {
-            var timeBlocks = new List<TimeAdBlock>();
-            var appropriateSchedules = plan.Schedules.Where(s => s.Dates.Any(d => d >= start && d <= end)).ToList();
+            var cleanTimeLineBlocks = timeLine.Where(b => !b.Gap);
+            var planTimeBlocks = GenerateTimeAdBlocks(newPlan, day).Where(b => b.Start >= startTime);
+            var mergedTimeBlocks = cleanTimeLineBlocks.Concat(planTimeBlocks).OrderBy(b => b.Start).ToList();
+
+            if (!mergedTimeBlocks.Any())
+            {
+                return timeLine;
+            }
+
+            var mergedTimeLine = new List<TimeBlock>();
+            var firstTimeBlock = mergedTimeBlocks.First();
+            var lastTimeBlock = mergedTimeBlocks.Last();
+
+            if (firstTimeBlock.Start != startTime)
+            {
+                var gapForStart = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, startTime, firstTimeBlock.Start, true);
+                mergedTimeLine.Add(gapForStart);
+            }
+
+            var timeBlocksWithGaps = IncludeGapsBetweenTimeBlocks(mergedTimeBlocks);
+            mergedTimeLine.AddRange(timeBlocksWithGaps);
+
+            if (lastTimeBlock.End != _config.EndWorking)
+            {
+                var gapForEnd = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, lastTimeBlock.End, _config.EndWorking, true);
+                timeLine.Add(gapForEnd);
+            }
+
+            return mergedTimeLine;
+        }
+
+        private List<TimeBlock> IncludeGapsBetweenTimeBlocks(List<TimeBlock> timeBlocks)
+        {
+            var timeBlocksWithGaps = new List<TimeBlock>();
+            TimeBlock previousBlock = null;
+
+            foreach (var currentBlock in timeBlocks)
+            {
+                if (previousBlock != null && previousBlock.End != currentBlock.Start)
+                {
+                    var gap = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, previousBlock.End, currentBlock.Start, true);
+                    timeBlocksWithGaps.Add(gap);
+                }
+                timeBlocksWithGaps.Add(currentBlock);
+                previousBlock = currentBlock;
+            }
+
+            return timeBlocksWithGaps;
+        }
+
+        private List<TimeBlock> GenerateTimeAdBlocks(PlanTime plan, DateTime day)
+        {
+            var timeBlocks = new List<TimeBlock>();
+            var appropriateSchedules = plan.Schedules.Where(s => s.Dates.Any(d => d == day.Date)).ToList();
             var orderedAds = plan.Ads.OrderBy(a => a.Order);
 
             var adsCircle = new LinkedList<AdPlanTime>(orderedAds);
@@ -77,7 +116,7 @@ namespace AdOut.Stream.Core.Services
             {
                 foreach (var timeRange in schedule.TimeRanges)
                 {
-                    var timeBlock = new TimeAdBlock(currentAdNode.Value.Title, currentAdNode.Value.Path, timeRange.Start, timeRange.End);
+                    var timeBlock = new TimeBlock(currentAdNode.Value.Title, currentAdNode.Value.Path, timeRange.Start, timeRange.End);
                     currentAdNode = currentAdNode.Next ?? adsCircle.First;
                     timeBlocks.Add(timeBlock);
                 }
