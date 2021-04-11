@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Linq;
+using AdOut.Stream.Core.Automapper;
 
 namespace AdOut.Stream
 {
@@ -98,8 +100,8 @@ namespace AdOut.Stream
                             },
                             TimeRanges = new List<TimeRange>()
                             {
-                                new TimeRange() { Start = TimeSpan.Parse("16:55"), End = TimeSpan.Parse("17:00") },
-                                new TimeRange() { Start = TimeSpan.Parse("17:05"), End = TimeSpan.Parse("17:10") }
+                                new TimeRange() { Start = TimeSpan.Parse("16:15"), End = TimeSpan.Parse("16:20") },
+                                new TimeRange() { Start = TimeSpan.Parse("16:25"), End = TimeSpan.Parse("16:30") }
                             }
                         }
                     }
@@ -107,8 +109,11 @@ namespace AdOut.Stream
             };
 
             //var a = timeLineService.GenerateTimeAdBlocks(plans[0], new DateTime(2021, 4, 4), new DateTime(2021, 4, 4));
-            //var b = timeLineService.GenerateTimeLine(plans, new DateTime(2021, 4, 2), new DateTime(2021, 4, 2));
-            var b = timeLineService.GenerateTimeLine(plans, new DateTime(2021, 4, 8), new DateTime(2021, 4, 8));
+            var timeLine = timeLineService.GenerateTimeLine(new List<PlanTime>() { plans[0] }, new DateTime(2021, 4, 2));
+            //var b = timeLineService.GenerateTimeLine(plans, new DateTime(2021, 4, 8), new DateTime(2021, 4, 8));
+
+            var skip = timeLine.Skip(8).ToList();
+            var m =  timeLineService.MergeTimeLine(skip, plans[1], new DateTime(2021, 4, 2), TimeSpan.Parse("10:30"));
         }
 
         /// <summary>
@@ -119,14 +124,18 @@ namespace AdOut.Stream
         { 
             var host = CreateHostBuilder().Build();
             using var scope = host.Services.CreateScope();
+
+            var adQueueRefresher = scope.ServiceProvider.GetRequiredService<IAdQueueRefresher>();
             var initializationTasks = scope.ServiceProvider.GetServices<IInitialization>();
 
-            Test(scope.ServiceProvider.GetRequiredService<ITimeLineService>());
+            //Test(scope.ServiceProvider.GetRequiredService<ITimeLineService>());
 
             foreach (var t in initializationTasks)
             {
                 await t.InitAsync();
             }
+
+            adQueueRefresher.Start();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -140,11 +149,18 @@ namespace AdOut.Stream
                .ConfigureServices((hostContext, services) =>
                {
                    services.AddMessageBrokerServices();
-                   services.AddSingleton<IPlanHandledConsumer, PlanHandledConsumer>();
+
                    services.AddScoped<IInitialization, PlanHandledQueueInitialization>();
                    services.AddScoped<ITimeLineService, TimeLineService>();
+                   services.AddScoped<IAdQueueService, AdQueueService>();
+                   services.AddScoped<IAdQueueRefresher, AdQueueRefresher>();
+                   services.AddSingleton<IPlanHandledConsumer, PlanHandledConsumer>(); //TODO: mb should be scoped as other
+
                    services.Configure<RabbitConfig>(hostContext.Configuration.GetSection(nameof(RabbitConfig)));
                    services.Configure<AdPointConfig>(hostContext.Configuration.GetSection(nameof(AdPointConfig)));
+
+                   services.AddAutoMapper(typeof(PlanProfile).Assembly);
+
                    services.AddTransient<Form1>();
                });    
     }
