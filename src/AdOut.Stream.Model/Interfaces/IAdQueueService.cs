@@ -9,9 +9,9 @@ namespace AdOut.Stream.Model.Interfaces
         TimeBlock Current { get; }
         List<TimeBlock> RemainTimeBlocks { get; }
 
-        event EventHandler<TimeBlock> CurrentModified;
+        event EventHandler CurrentShouldBeChanged;
         TimeBlock Dequeue();
-        void Configure(IEnumerable<TimeBlock> timeLine);
+        void Configure(IEnumerable<TimeBlock> timeLine, bool modifyTimeLine = false);
     }
 }
  

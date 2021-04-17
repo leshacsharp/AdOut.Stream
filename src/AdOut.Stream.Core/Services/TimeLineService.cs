@@ -16,9 +16,9 @@ namespace AdOut.Stream.Core.Services
             _config = options.Value;
         }
 
-        public List<TimeBlock> GenerateTimeLine(List<PlanTime> plans, DateTime day)
+        public List<TimeBlock> GenerateTimeLine(List<PlanTime> plans, DateTime date)
         {
-            var timeBlocks = plans.SelectMany(p => GenerateTimeAdBlocks(p, day))
+            var timeBlocks = plans.SelectMany(p => GenerateTimeAdBlocks(p, date))
                                   .OrderBy(b => b.Start)
                                   .ToList();
 
@@ -51,10 +51,10 @@ namespace AdOut.Stream.Core.Services
         }
 
         //for not gaps the startTime is CurrentTimeBlock.End, for gaps the startTimec is a day local time
-        public List<TimeBlock> MergeTimeLine(List<TimeBlock> timeLine, PlanTime newPlan, DateTime day, TimeSpan startTime)
+        public List<TimeBlock> MergeTimeLine(List<TimeBlock> timeLine, PlanTime newPlan, DateTime date, TimeSpan startTime)
         {
             var cleanTimeLineBlocks = timeLine.Where(b => !b.Gap);
-            var planTimeBlocks = GenerateTimeAdBlocks(newPlan, day).Where(b => b.Start >= startTime);
+            var planTimeBlocks = GenerateTimeAdBlocks(newPlan, date).Where(b => b.Start >= startTime);
             var mergedTimeBlocks = cleanTimeLineBlocks.Concat(planTimeBlocks).OrderBy(b => b.Start).ToList();
 
             if (!mergedTimeBlocks.Any())
@@ -103,10 +103,10 @@ namespace AdOut.Stream.Core.Services
             return timeBlocksWithGaps;
         }
 
-        private List<TimeBlock> GenerateTimeAdBlocks(PlanTime plan, DateTime day)
+        private List<TimeBlock> GenerateTimeAdBlocks(PlanTime plan, DateTime date)
         {
             var timeBlocks = new List<TimeBlock>();
-            var appropriateSchedules = plan.Schedules.Where(s => s.Dates.Any(d => d == day.Date)).ToList();
+            var appropriateSchedules = plan.Schedules.Where(s => s.Dates.Any(d => d == date.Date)).ToList();
             var orderedAds = plan.Ads.OrderBy(a => a.Order);
 
             var adsCircle = new LinkedList<AdPlanTime>(orderedAds);

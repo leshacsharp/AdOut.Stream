@@ -40,7 +40,7 @@ namespace AdOut.Stream.Core.Consumers
             var timeLineStart = _adQueueService.Current.Gap ? DateTime.Now.TimeOfDay : _adQueueService.Current.End;
             var updatedTimeLine = _timeLineService.MergeTimeLine(currentTimeLine, newPlan, DateTime.Now.Date, timeLineStart);
 
-            _adQueueService.Configure(updatedTimeLine);
+            _adQueueService.Configure(updatedTimeLine, true);
             return Task.CompletedTask;
         }
     }

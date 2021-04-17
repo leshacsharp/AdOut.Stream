@@ -23,6 +23,8 @@ namespace AdOut.Stream.Core.Services
         //todo: refactor operations that are related with time
         public void Start()
         {
+            ExecuteAsync(null);
+
             var waitForNextDay = TimeSpan.FromDays(1) - DateTime.Now.TimeOfDay;
             _timer = new Timer(ExecuteAsync, null, waitForNextDay, TimeSpan.FromDays(1));
         }

@@ -15,24 +15,23 @@ namespace AdOut.Stream.Core.Services
         public TimeBlock Current => _currentTimeBlock;
         public List<TimeBlock> RemainTimeBlocks => _queue.ToList();
 
-        public event EventHandler<TimeBlock> CurrentModified;
+        public event EventHandler CurrentShouldBeChanged;
 
         public TimeBlock Dequeue()
         {
-            _currentTimeBlock = _queue.Dequeue();
+            _queue.TryDequeue(out _currentTimeBlock);
             return _currentTimeBlock;
         }
 
-        public void Configure(IEnumerable<TimeBlock> timeLine)
+        public void Configure(IEnumerable<TimeBlock> timeLine, bool modifyTimeLine = false)
         {
-            var curTimeRange = new TimeRange() { Start = Current.Start, End = Current.End };
-            var firstTimeBlock = timeLine.FirstOrDefault();
-
-            if (firstTimeBlock != null &&
-                firstTimeBlock.Gap &&
-                curTimeRange.IsInterescted(firstTimeBlock.Start, firstTimeBlock.End))
+            if (modifyTimeLine)
             {
-                CurrentModified.Invoke(this, firstTimeBlock);
+                var firstTimeBlock = timeLine.FirstOrDefault();
+                if (firstTimeBlock != null && Current != null && Current.Gap)
+                {
+                    CurrentShouldBeChanged.Invoke(this, new EventArgs());
+                }
             }
 
             _queue = new Queue<TimeBlock>(timeLine);
