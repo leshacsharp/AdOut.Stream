@@ -15,7 +15,7 @@ namespace AdOut.Stream.Core.Services
         public TimeBlock Current => _currentTimeBlock;
         public List<TimeBlock> RemainTimeBlocks => _queue.ToList();
 
-        public event EventHandler CurrentShouldBeChanged;
+        public event EventHandler CurrentBlockShouldBeChanged;
 
         public TimeBlock Dequeue()
         {
@@ -30,7 +30,7 @@ namespace AdOut.Stream.Core.Services
                 var firstTimeBlock = timeLine.FirstOrDefault();
                 if (firstTimeBlock != null && Current != null && Current.Gap)
                 {
-                    CurrentShouldBeChanged.Invoke(this, new EventArgs());
+                    CurrentBlockShouldBeChanged.Invoke(this, new EventArgs());
                 }
             }
 

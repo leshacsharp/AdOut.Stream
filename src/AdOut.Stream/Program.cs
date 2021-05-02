@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Linq;
 using AdOut.Stream.Core.Automapper;
+using AdOut.Extensions.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace AdOut.Stream
 {
@@ -135,7 +137,7 @@ namespace AdOut.Stream
                 await t.InitAsync();
             }
 
-            adQueueRefresher.Start();
+            //adQueueRefresher.Start();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -149,6 +151,7 @@ namespace AdOut.Stream
                .ConfigureServices((hostContext, services) =>
                {
                    services.AddMessageBrokerServices();
+                   services.AddAuthenticationServices(hostContext.Configuration.GetValue<string>($"{nameof(AuthorizationConfig)}:{nameof(AuthorizationConfig.AuthServerUrl)}"));
 
                    services.AddScoped<IInitialization, PlanHandledQueueInitialization>();
                    services.AddScoped<ITimeLineService, TimeLineService>();
@@ -156,10 +159,10 @@ namespace AdOut.Stream
                    services.AddScoped<IAdQueueRefresher, AdQueueRefresher>();
                    services.AddSingleton<IPlanHandledConsumer, PlanHandledConsumer>(); //TODO: mb should be scoped as other
 
+                   services.AddAutoMapper(typeof(PlanProfile).Assembly);
                    services.Configure<RabbitConfig>(hostContext.Configuration.GetSection(nameof(RabbitConfig)));
                    services.Configure<AdPointConfig>(hostContext.Configuration.GetSection(nameof(AdPointConfig)));
-
-                   services.AddAutoMapper(typeof(PlanProfile).Assembly);
+                   services.Configure<AuthorizationConfig>(hostContext.Configuration.GetSection(nameof(AuthorizationConfig)));
 
                    services.AddTransient<Form1>();
                });    
