@@ -5,11 +5,14 @@ using AdOut.Stream.Model.Models;
 using AutoMapper;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace AdOut.Stream.Core.Consumers
 {
     public class PlanHandledConsumer : BaseConsumer<PlanHandledEvent>, IPlanHandledConsumer
     {
+        //todo: it's the scoped service
         private readonly ITimeLineService _timeLineService;
         private readonly IAdQueueService _adQueueService;
         private readonly IMapper _mapper;
@@ -37,10 +40,22 @@ namespace AdOut.Stream.Core.Consumers
             //todo: change time getters
             var newPlan = _mapper.Map<PlanTime>(deliveredEvent);
             var currentTimeLine = _adQueueService.RemainTimeBlocks;
-            var timeLineStart = _adQueueService.Current.Gap ? DateTime.Now.TimeOfDay : _adQueueService.Current.End;
-            var updatedTimeLine = _timeLineService.MergeTimeLine(currentTimeLine, newPlan, DateTime.Now.Date, timeLineStart);
 
-            _adQueueService.Configure(updatedTimeLine, true);
+            if (currentTimeLine.Any())
+            {
+                var timeLineStart = _adQueueService.Current != null
+                    ? _adQueueService.Current.Gap ? DateTime.Now.TimeOfDay : _adQueueService.Current.End
+                    : currentTimeLine.First().Start;
+
+                var updatedTimeLine = _timeLineService.MergeTimeLine(currentTimeLine, newPlan, DateTime.Now.Date, timeLineStart);
+                _adQueueService.Configure(updatedTimeLine, true);
+            }
+            else
+            {
+                var newTimeLine = _timeLineService.GenerateTimeLine(new List<PlanTime> { newPlan }, DateTime.Now.Date);
+                _adQueueService.Configure(newTimeLine);
+            }
+
             return Task.CompletedTask;
         }
     }

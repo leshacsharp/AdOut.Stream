@@ -4,6 +4,12 @@ namespace AdOut.Stream.Model.Models
 {
     public class TimeRange
     {
+        public TimeRange(TimeSpan start, TimeSpan end)
+        {
+            Start = start;
+            End = end;
+        }
+
         public TimeSpan Start { get; set; }
         public TimeSpan End { get; set; }
 

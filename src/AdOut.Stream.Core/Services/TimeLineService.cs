@@ -22,34 +22,9 @@ namespace AdOut.Stream.Core.Services
                                   .OrderBy(b => b.Start)
                                   .ToList();
 
-            if (!timeBlocks.Any())
-            {
-                var gapForAllTime = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.StartWorking, _config.EndWorking, true);
-                return new List<TimeBlock>() { gapForAllTime };
-            }
-
-            var timeLine = new List<TimeBlock>();
-            var firstTimeBlock = timeBlocks.First();
-            var lastTimeBlock = timeBlocks.Last();
-
-            if (firstTimeBlock.Start != _config.StartWorking)
-            {
-                var gapForStart = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.StartWorking, firstTimeBlock.Start, true);
-                timeLine.Add(gapForStart);
-            }
-
-            var timeBlocksWithGaps = IncludeGapsBetweenTimeBlocks(timeBlocks);
-            timeLine.AddRange(timeBlocksWithGaps);
-
-            if (lastTimeBlock.End != _config.EndWorking)
-            {
-                var gapForEnd = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, lastTimeBlock.End, _config.EndWorking, true);
-                timeLine.Add(gapForEnd);
-            }
-
-            return timeLine;
+            return FillTimeLine(timeBlocks, _config.StartWorking);
         }
-
+   
         //for not gaps the startTime is CurrentTimeBlock.End, for gaps the startTimec is a day local time
         public List<TimeBlock> MergeTimeLine(List<TimeBlock> timeLine, PlanTime newPlan, DateTime date, TimeSpan startTime)
         {
@@ -57,31 +32,37 @@ namespace AdOut.Stream.Core.Services
             var planTimeBlocks = GenerateTimeAdBlocks(newPlan, date).Where(b => b.Start >= startTime);
             var mergedTimeBlocks = cleanTimeLineBlocks.Concat(planTimeBlocks).OrderBy(b => b.Start).ToList();
 
-            if (!mergedTimeBlocks.Any())
+            return FillTimeLine(mergedTimeBlocks, startTime);   
+        }
+
+        private List<TimeBlock> FillTimeLine(List<TimeBlock> timeBlocks, TimeSpan startTimeLine)
+        {
+            if (!timeBlocks.Any())
             {
-                return timeLine;
+                var gapForAllTime = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, startTimeLine, _config.EndWorking, true);
+                return new List<TimeBlock>() { gapForAllTime };
             }
 
-            var mergedTimeLine = new List<TimeBlock>();
-            var firstTimeBlock = mergedTimeBlocks.First();
-            var lastTimeBlock = mergedTimeBlocks.Last();
+            var timeLine = new List<TimeBlock>();
+            var firstTimeBlock = timeBlocks.First();
+            var lastTimeBlock = timeBlocks.Last();
 
-            if (firstTimeBlock.Start != startTime)
+            if (firstTimeBlock.Start > startTimeLine)
             {
-                var gapForStart = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, startTime, firstTimeBlock.Start, true);
-                mergedTimeLine.Add(gapForStart);
+                var gapForStart = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, startTimeLine, firstTimeBlock.Start, true);
+                timeLine.Add(gapForStart);
             }
 
-            var timeBlocksWithGaps = IncludeGapsBetweenTimeBlocks(mergedTimeBlocks);
-            mergedTimeLine.AddRange(timeBlocksWithGaps);
+            var timeBlocksWithGaps = IncludeGapsBetweenTimeBlocks(timeBlocks);
+            timeLine.AddRange(timeBlocksWithGaps);
 
-            if (lastTimeBlock.End != _config.EndWorking)
+            if (lastTimeBlock.End < _config.EndWorking)
             {
                 var gapForEnd = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, lastTimeBlock.End, _config.EndWorking, true);
                 timeLine.Add(gapForEnd);
             }
 
-            return mergedTimeLine;
+            return timeLine;
         }
 
         private List<TimeBlock> IncludeGapsBetweenTimeBlocks(List<TimeBlock> timeBlocks)

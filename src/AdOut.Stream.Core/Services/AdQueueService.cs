@@ -33,7 +33,6 @@ namespace AdOut.Stream.Core.Services
                     CurrentBlockShouldBeChanged.Invoke(this, new EventArgs());
                 }
             }
-
             _queue = new Queue<TimeBlock>(timeLine);
         }
     }
