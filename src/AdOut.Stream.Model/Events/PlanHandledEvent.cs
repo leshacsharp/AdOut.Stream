@@ -1,12 +1,12 @@
 ﻿using AdOut.Extensions.Communication;
+using AdOut.Extensions.Communication.Attributes;
 using AdOut.Stream.Model.Models;
 using System;
 using System.Collections.Generic;
 
 namespace AdOut.Stream.Model.Events
 {
-    [IgnoreQueueDeclare]
-    [ExchangeType(ExchangeTypeEnum.Headers)]
+    [IgnoreEventDeclaration]
     public class PlanHandledEvent : IntegrationEvent
     {
         public string Id { get; set; }

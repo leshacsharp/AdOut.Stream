@@ -12,15 +12,18 @@ namespace AdOut.Stream.Core.Services
     public class PlanHandledQueueInitialization : IInitialization
     {
         private readonly IMessageBroker _messageBroker;
+        private readonly IMessageBrokerHelper _messageBrokerHelper; 
         private readonly IPlanHandledConsumer _planHandledConsumer;
         private readonly IConfiguration _configuration;
 
         public PlanHandledQueueInitialization(
             IMessageBroker messageBroker,
+            IMessageBrokerHelper messageBrokerHelper,
             IPlanHandledConsumer planHandledConsumer,
             IConfiguration configuration)
         {
             _messageBroker = messageBroker;
+            _messageBrokerHelper = messageBrokerHelper;
             _planHandledConsumer = planHandledConsumer;
             _configuration = configuration;
         }
@@ -35,7 +38,9 @@ namespace AdOut.Stream.Core.Services
                 { $"adpoint-{adPointId}", true }
             };
 
-            _messageBroker.CreateQueue(typeof(PlanHandledEvent), queueName, queueName, queueBinding);
+            var exchangeName = _messageBrokerHelper.GetExchangeName(typeof(PlanHandledEvent));
+            _messageBroker.CreateExchange(exchangeName, Extensions.Communication.ExchangeTypeEnum.Headers);
+            _messageBroker.CreateQueue(queueName, exchangeName, arguments: queueBinding);
             _messageBroker.Subscribe(queueName, _planHandledConsumer);
 
             return Task.CompletedTask;
