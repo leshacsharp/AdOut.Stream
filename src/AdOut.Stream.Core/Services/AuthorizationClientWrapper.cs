@@ -23,6 +23,8 @@ namespace AdOut.Stream.Core.Services
             _config = config.Value;
         }
 
+        //todo: Keep the access token and use it (when the token is expired, request new one)
+        
         public async Task<TClient> GetClientAsync()
         {
             var configuration = _client.GetType().GetProperty("Configuration");
@@ -42,3 +44,4 @@ namespace AdOut.Stream.Core.Services
         }
     }
 }
+        

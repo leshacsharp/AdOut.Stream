@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		nuget.config = nuget.config
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{580ADFB4-B2AE-4E97-B8E4-E80A88BD79DD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdOut.Stream.Planning.Client", "AdOut.Stream.Planning.Client\AdOut.Stream.Planning.Client.csproj", "{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,9 +36,16 @@ Global
 		{DD8A1BD6-1D91-4631-87CE-B3FB2893BB1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DD8A1BD6-1D91-4631-87CE-B3FB2893BB1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DD8A1BD6-1D91-4631-87CE-B3FB2893BB1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41} = {580ADFB4-B2AE-4E97-B8E4-E80A88BD79DD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {ACF185EE-06FF-4313-B73C-6D1584697E48}
