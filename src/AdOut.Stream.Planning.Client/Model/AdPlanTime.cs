@@ -33,11 +33,13 @@ namespace AdOut.Stream.Planning.Client.Model
         /// <param name="title">title.</param>
         /// <param name="path">path.</param>
         /// <param name="order">order.</param>
-        public AdPlanTime(string title = default(string), string path = default(string), int? order = default(int?))
+        /// <param name="contentType">contentType.</param>
+        public AdPlanTime(string title = default(string), string path = default(string), int? order = default(int?), ContentType contentType = default(ContentType))
         {
             this.Title = title;
             this.Path = path;
             this.Order = order;
+            this.ContentType = contentType;
         }
         
         /// <summary>
@@ -59,6 +61,12 @@ namespace AdOut.Stream.Planning.Client.Model
         public int? Order { get; set; }
 
         /// <summary>
+        /// Gets or Sets ContentType
+        /// </summary>
+        [DataMember(Name="ContentType", EmitDefaultValue=false)]
+        public ContentType ContentType { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -69,6 +77,7 @@ namespace AdOut.Stream.Planning.Client.Model
             sb.Append("  Title: ").Append(Title).Append("\n");
             sb.Append("  Path: ").Append(Path).Append("\n");
             sb.Append("  Order: ").Append(Order).Append("\n");
+            sb.Append("  ContentType: ").Append(ContentType).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
@@ -117,6 +126,11 @@ namespace AdOut.Stream.Planning.Client.Model
                     this.Order == input.Order ||
                     (this.Order != null &&
                     this.Order.Equals(input.Order))
+                ) && 
+                (
+                    this.ContentType == input.ContentType ||
+                    (this.ContentType != null &&
+                    this.ContentType.Equals(input.ContentType))
                 );
         }
 
@@ -135,6 +149,8 @@ namespace AdOut.Stream.Planning.Client.Model
                     hashCode = hashCode * 59 + this.Path.GetHashCode();
                 if (this.Order != null)
                     hashCode = hashCode * 59 + this.Order.GetHashCode();
+                if (this.ContentType != null)
+                    hashCode = hashCode * 59 + this.ContentType.GetHashCode();
                 return hashCode;
             }
         }

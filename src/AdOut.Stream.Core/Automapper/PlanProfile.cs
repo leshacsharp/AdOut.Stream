@@ -1,11 +1,7 @@
 ﻿using AdOut.Stream.Model.Events;
 using AdOut.Stream.Model.Models;
+using AdOut.Stream.Planning.Client.Model;
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdOut.Stream.Core.Automapper
 {
@@ -14,6 +10,7 @@ namespace AdOut.Stream.Core.Automapper
         public PlanProfile()
         {
             CreateMap<PlanHandledEvent, PlanTime>();
+            CreateMap<StreamPlanTime, PlanTime>();
         }
     }
 }

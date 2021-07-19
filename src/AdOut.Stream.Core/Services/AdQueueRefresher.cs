@@ -1,8 +1,7 @@
 ﻿using AdOut.Stream.Model.Interfaces;
-using AdOut.Stream.Model.Models;
 using System;
-using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace AdOut.Stream.Core.Services
 {
@@ -10,29 +9,30 @@ namespace AdOut.Stream.Core.Services
     {
         private readonly ITimeLineService _timeLineService;
         private readonly IAdQueueService _adQueueService;
+        private readonly IPlanService _planService;
         private Timer _timer;
 
         public AdQueueRefresher(
             ITimeLineService timeLineService,
-            IAdQueueService adQueueService)
+            IAdQueueService adQueueService,
+            IPlanService planService)
         {
             _timeLineService = timeLineService;
             _adQueueService = adQueueService;
+            _planService = planService;
         }
 
-        //todo: refactor operations that are related with time
-        public void Start()
+        public async Task StartAsync()
         {
-            ExecuteAsync(null);
+            await SetTimeLineAsync();
 
             var waitForNextDay = TimeSpan.FromDays(1) - DateTime.Now.TimeOfDay;
-            _timer = new Timer(ExecuteAsync, null, waitForNextDay, TimeSpan.FromDays(1));
+            _timer = new Timer(async (o) => await SetTimeLineAsync(), null, waitForNextDay, TimeSpan.FromDays(1));
         }
 
-        private void ExecuteAsync(object state)
+        private async Task SetTimeLineAsync()
         {
-            //todo: fetch plans from the AdOut.Planning service
-            List<PlanTime> plans = null;
+            var plans = await _planService.GetPlanTimesAsync(DateTime.Now);
             var timeLine = _timeLineService.GenerateTimeLine(plans, DateTime.Now.Date);
             _adQueueService.Configure(timeLine);   
         }

@@ -1,9 +1,10 @@
 ﻿using AdOut.Extensions.Communication.Interfaces;
 using AdOut.Extensions.Communication.Models;
 using AdOut.Extensions.Infrastructure;
+using AdOut.Stream.Model.Config;
 using AdOut.Stream.Model.Events;
 using AdOut.Stream.Model.Interfaces;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,28 +15,27 @@ namespace AdOut.Stream.Core.Services
         private readonly IMessageBroker _messageBroker;
         private readonly IMessageBrokerHelper _messageBrokerHelper; 
         private readonly IPlanHandledConsumer _planHandledConsumer;
-        private readonly IConfiguration _configuration;
+        private readonly AdPointConfig _config;
 
         public PlanHandledQueueInitialization(
             IMessageBroker messageBroker,
             IMessageBrokerHelper messageBrokerHelper,
             IPlanHandledConsumer planHandledConsumer,
-            IConfiguration configuration)
+            IOptions<AdPointConfig> config)
         {
             _messageBroker = messageBroker;
             _messageBrokerHelper = messageBrokerHelper;
             _planHandledConsumer = planHandledConsumer;
-            _configuration = configuration;
+            _config = config.Value;
         }
 
         public Task InitAsync()
         {
-            var adPointId = _configuration.GetValue<string>("AdPointId");
-            var queueName = $"adpoint-{adPointId}-queue";
+            var queueName = $"adpoint-{_config.Id}-queue";
             var queueBinding = new Dictionary<string, object>()
             {
                 { DefaultHeaders.XMatch, "any" },
-                { $"adpoint-{adPointId}", true }
+                { $"adpoint-{_config.Id}", true }
             };
 
             var exchangeName = _messageBrokerHelper.GetExchangeName(typeof(PlanHandledEvent));

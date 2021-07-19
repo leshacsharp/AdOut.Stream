@@ -28,13 +28,14 @@ namespace AdOut.Stream.Planning.Client.Model
         public enum ContentType
     {
         /// <summary>
-        /// Enum _0 for value: 0
+        /// Enum Image for value: Image
         /// </summary>
-        [EnumMember(Value = "0")]
-        _0 = 1,
+        [EnumMember(Value = "Image")]
+        Image = 0,
         /// <summary>
-        /// Enum _1 for value: 1
+        /// Enum Video for value: Video
         /// </summary>
-        [EnumMember(Value = "1")]
-        _1 = 2    }
+        [EnumMember(Value = "Video")]
+        Video = 1    
+    }
 }

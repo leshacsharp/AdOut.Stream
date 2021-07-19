@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AdOut.Stream.Model\AdOut.Stream.Model.csproj" />
+    <ProjectReference Include="..\AdOut.Stream.Planning.Client\AdOut.Stream.Planning.Client.csproj" />
   </ItemGroup>
 
 </Project>

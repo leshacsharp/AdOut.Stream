@@ -28,18 +28,18 @@ namespace AdOut.Stream.Planning.Client.Model
         public enum AdStatus
     {
         /// <summary>
-        /// Enum _0 for value: 0
+        /// Enum OnModeration for value: OnModeration
         /// </summary>
-        [EnumMember(Value = "0")]
-        _0 = 1,
+        [EnumMember(Value = "OnModeration")]
+        OnModeration = 0,
         /// <summary>
-        /// Enum _1 for value: 1
+        /// Enum Rejected for value: Rejected
         /// </summary>
-        [EnumMember(Value = "1")]
-        _1 = 2,
+        [EnumMember(Value = "Rejected")]
+        Rejected = 1,
         /// <summary>
-        /// Enum _2 for value: 2
+        /// Enum Accepted for value: Accepted
         /// </summary>
-        [EnumMember(Value = "2")]
-        _2 = 3    }
+        [EnumMember(Value = "Accepted")]
+        Accepted = 2    }
 }

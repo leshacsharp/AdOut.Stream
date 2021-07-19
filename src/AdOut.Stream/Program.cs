@@ -16,6 +16,7 @@ using System.Linq;
 using AdOut.Stream.Core.Automapper;
 using AdOut.Extensions.Authorization;
 using Microsoft.Extensions.Configuration;
+using AdOut.Stream.Planning.Client.Api;
 
 namespace AdOut.Stream
 {
@@ -23,121 +24,121 @@ namespace AdOut.Stream
     {
         private static void Test(ITimeLineService timeLineService)
         {
-            var plans = new List<PlanTime>()
-            {
-                new PlanTime()
-                {
-                    Ads = new List<AdPlanTime>()
-                    {
-                        new AdPlanTime() { Title = "plan1-test1ad", Path = "path", Order = 1 },
-                        new AdPlanTime() { Title = "plan1-test2ad", Path = "path", Order = 2 }
-                    },
-                    Schedules = new List<SchedulePeriod>()
-                    {
-                        new SchedulePeriod()
-                        {
-                            Dates = new List<DateTime>()
-                            {
-                                new DateTime(2021, 4, 1),
-                                new DateTime(2021, 4, 2),
-                                new DateTime(2021, 4, 3)
-                            },
-                            TimeRanges = new List<TimeRange>()
-                            {
-                                new TimeRange() { Start = TimeSpan.Parse("10:00"), End = TimeSpan.Parse("10:05") },
-                                new TimeRange() { Start = TimeSpan.Parse("10:10"), End = TimeSpan.Parse("10:15") },
-                                new TimeRange() { Start = TimeSpan.Parse("10:20"), End = TimeSpan.Parse("10:25") },
-                                new TimeRange() { Start = TimeSpan.Parse("10:30"), End = TimeSpan.Parse("10:35") }
-                            }
-                        },
-                        new SchedulePeriod()
-                        {
-                            Dates = new List<DateTime>()
-                            {
-                                new DateTime(2021, 4, 2),
-                                new DateTime(2021, 4, 3),
-                                new DateTime(2021, 4, 4)
-                            },
-                            TimeRanges = new List<TimeRange>()
-                            {
-                                new TimeRange() { Start = TimeSpan.Parse("16:30"), End = TimeSpan.Parse("16:35") },
-                                new TimeRange() { Start = TimeSpan.Parse("16:40"), End = TimeSpan.Parse("16:45") },
-                                new TimeRange() { Start = TimeSpan.Parse("16:50"), End = TimeSpan.Parse("16:55") },
-                                new TimeRange() { Start = TimeSpan.Parse("17:00"), End = TimeSpan.Parse("17:05") }
-                            }
-                        }
-                    }
-                },
-                new PlanTime()
-                {
-                    Ads = new List<AdPlanTime>()
-                    {
-                        new AdPlanTime() { Title = "plan2-test1ad", Path = "path", Order = 2 },
-                        new AdPlanTime() { Title = "plan2-test2ad", Path = "path", Order = 1 }
-                    },
-                    Schedules = new List<SchedulePeriod>()
-                    {
-                        new SchedulePeriod()
-                        {
-                            Dates = new List<DateTime>()
-                            {
-                                new DateTime(2021, 4, 1),
-                                new DateTime(2021, 4, 2),
-                                new DateTime(2021, 4, 3)
-                            },
-                            TimeRanges = new List<TimeRange>()
-                            {
-                                new TimeRange() { Start = TimeSpan.Parse("10:05"), End = TimeSpan.Parse("10:10") },
-                                new TimeRange() { Start = TimeSpan.Parse("10:15"), End = TimeSpan.Parse("10:20") }
-                            }
-                        },
-                        new SchedulePeriod()
-                        {
-                            Dates = new List<DateTime>()
-                            {
-                                new DateTime(2021, 4, 2),
-                                new DateTime(2021, 4, 3),
-                                new DateTime(2021, 4, 4),
-                                new DateTime(2021, 4, 8)
-                            },
-                            TimeRanges = new List<TimeRange>()
-                            {
-                                new TimeRange() { Start = TimeSpan.Parse("16:15"), End = TimeSpan.Parse("16:20") },
-                                new TimeRange() { Start = TimeSpan.Parse("16:25"), End = TimeSpan.Parse("16:30") }
-                            }
-                        }
-                    }
-                }
-            };
+            //var plans = new List<PlanTime>()
+            //{
+            //    new PlanTime()
+            //    {
+            //        Ads = new List<AdPlanTime>()
+            //        {
+            //            new AdPlanTime() { Title = "plan1-test1ad", Path = "path", Order = 1 },
+            //            new AdPlanTime() { Title = "plan1-test2ad", Path = "path", Order = 2 }
+            //        },
+            //        Schedules = new List<SchedulePeriod>()
+            //        {
+            //            new SchedulePeriod()
+            //            {
+            //                Dates = new List<DateTime>()
+            //                {
+            //                    new DateTime(2021, 4, 1),
+            //                    new DateTime(2021, 4, 2),
+            //                    new DateTime(2021, 4, 3)
+            //                },
+            //                TimeRanges = new List<TimeRange>()
+            //                {
+            //                    new TimeRange() { Start = TimeSpan.Parse("10:00"), End = TimeSpan.Parse("10:05") },
+            //                    new TimeRange() { Start = TimeSpan.Parse("10:10"), End = TimeSpan.Parse("10:15") },
+            //                    new TimeRange() { Start = TimeSpan.Parse("10:20"), End = TimeSpan.Parse("10:25") },
+            //                    new TimeRange() { Start = TimeSpan.Parse("10:30"), End = TimeSpan.Parse("10:35") }
+            //                }
+            //            },
+            //            new SchedulePeriod()
+            //            {
+            //                Dates = new List<DateTime>()
+            //                {
+            //                    new DateTime(2021, 4, 2),
+            //                    new DateTime(2021, 4, 3),
+            //                    new DateTime(2021, 4, 4)
+            //                },
+            //                TimeRanges = new List<TimeRange>()
+            //                {
+            //                    new TimeRange() { Start = TimeSpan.Parse("16:30"), End = TimeSpan.Parse("16:35") },
+            //                    new TimeRange() { Start = TimeSpan.Parse("16:40"), End = TimeSpan.Parse("16:45") },
+            //                    new TimeRange() { Start = TimeSpan.Parse("16:50"), End = TimeSpan.Parse("16:55") },
+            //                    new TimeRange() { Start = TimeSpan.Parse("17:00"), End = TimeSpan.Parse("17:05") }
+            //                }
+            //            }
+            //        }
+            //    },
+            //    new PlanTime()
+            //    {
+            //        Ads = new List<AdPlanTime>()
+            //        {
+            //            new AdPlanTime() { Title = "plan2-test1ad", Path = "path", Order = 2 },
+            //            new AdPlanTime() { Title = "plan2-test2ad", Path = "path", Order = 1 }
+            //        },
+            //        Schedules = new List<SchedulePeriod>()
+            //        {
+            //            new SchedulePeriod()
+            //            {
+            //                Dates = new List<DateTime>()
+            //                {
+            //                    new DateTime(2021, 4, 1),
+            //                    new DateTime(2021, 4, 2),
+            //                    new DateTime(2021, 4, 3)
+            //                },
+            //                TimeRanges = new List<TimeRange>()
+            //                {
+            //                    new TimeRange() { Start = TimeSpan.Parse("10:05"), End = TimeSpan.Parse("10:10") },
+            //                    new TimeRange() { Start = TimeSpan.Parse("10:15"), End = TimeSpan.Parse("10:20") }
+            //                }
+            //            },
+            //            new SchedulePeriod()
+            //            {
+            //                Dates = new List<DateTime>()
+            //                {
+            //                    new DateTime(2021, 4, 2),
+            //                    new DateTime(2021, 4, 3),
+            //                    new DateTime(2021, 4, 4),
+            //                    new DateTime(2021, 4, 8)
+            //                },
+            //                TimeRanges = new List<TimeRange>()
+            //                {
+            //                    new TimeRange() { Start = TimeSpan.Parse("16:15"), End = TimeSpan.Parse("16:20") },
+            //                    new TimeRange() { Start = TimeSpan.Parse("16:25"), End = TimeSpan.Parse("16:30") }
+            //                }
+            //            }
+            //        }
+            //    }
+            //};
 
             //var a = timeLineService.GenerateTimeAdBlocks(plans[0], new DateTime(2021, 4, 4), new DateTime(2021, 4, 4));
-            var timeLine = timeLineService.GenerateTimeLine(new List<PlanTime>() { plans[0] }, new DateTime(2021, 4, 2));
-            //var b = timeLineService.GenerateTimeLine(plans, new DateTime(2021, 4, 8), new DateTime(2021, 4, 8));
+            //var timeLine = timeLineService.GenerateTimeLine(new List<PlanTime>() { plans[0] }, new DateTime(2021, 4, 2));
+            ////var b = timeLineService.GenerateTimeLine(plans, new DateTime(2021, 4, 8), new DateTime(2021, 4, 8));
 
-            var skip = timeLine.Skip(8).ToList();
-            var m =  timeLineService.MergeTimeLine(skip, plans[1], new DateTime(2021, 4, 2), TimeSpan.Parse("10:30"));
+            //var skip = timeLine.Skip(8).ToList();
+            //var m =  timeLineService.MergeTimeLine(skip, plans[1], new DateTime(2021, 4, 2), TimeSpan.Parse("10:30"));
         }
 
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static async Task Main()
+        static void Main()
         { 
             var host = CreateHostBuilder().Build();
-            using var scope = host.Services.CreateScope();
+            //using var scope = host.Services.CreateScope();
 
-            var adQueueRefresher = scope.ServiceProvider.GetRequiredService<IAdQueueRefresher>();
-            var initializationTasks = scope.ServiceProvider.GetServices<IInitialization>();
+            //var adQueueRefresher = scope.ServiceProvider.GetRequiredService<IAdQueueRefresher>();
+            //var initializationTasks = scope.ServiceProvider.GetServices<IInitialization>();
 
             //Test(scope.ServiceProvider.GetRequiredService<ITimeLineService>());
 
-            foreach (var t in initializationTasks)
-            {
-                await t.InitAsync();
-            }
+           // foreach (var t in initializationTasks)
+            //{
+              //  await t.InitAsync();
+           // }
 
-            //adQueueRefresher.Start();
+           // await adQueueRefresher.StartAsync();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -150,19 +151,31 @@ namespace AdOut.Stream
                .UseConsoleLifetime()
                .ConfigureServices((hostContext, services) =>
                {
+                   var configuration = hostContext.Configuration;
                    services.AddMessageBrokerServices();
-                   services.AddAuthenticationServices(hostContext.Configuration.GetValue<string>($"{nameof(AuthorizationConfig)}:{nameof(AuthorizationConfig.AuthServerUrl)}"));
+                   services.AddAuthenticationServices(configuration.GetValue<string>($"{nameof(AuthorizationConfig)}:{nameof(AuthorizationConfig.AuthServerUrl)}"));
 
                    services.AddScoped<IInitialization, PlanHandledQueueInitialization>();
                    services.AddScoped<ITimeLineService, TimeLineService>();
                    services.AddScoped<IAdQueueService, AdQueueService>();
                    services.AddScoped<IAdQueueRefresher, AdQueueRefresher>();
                    services.AddSingleton<IPlanHandledConsumer, PlanHandledConsumer>(); //TODO: mb should be scoped as other
+                   services.AddScoped<IPlanService, PlanService>();
+
+                   var serviceConfig = new ServiceConfiguration();
+                   configuration.GetSection("Services:Planning").Bind(serviceConfig);
+                   var planningConfig = new Planning.Client.Client.Configuration()
+                   {
+                       BasePath = serviceConfig.BasePath,
+                       Timeout = serviceConfig.TimeOut
+                   };
+                   services.AddScoped<IPlanApi>(p => new PlanApi(planningConfig));
+                   services.AddScoped<IAuthorizationClientWrapper<IPlanApi>, AuthorizationClientWrapper<IPlanApi>>();
 
                    services.AddAutoMapper(typeof(PlanProfile).Assembly);
-                   services.Configure<RabbitConfig>(hostContext.Configuration.GetSection(nameof(RabbitConfig)));
-                   services.Configure<AdPointConfig>(hostContext.Configuration.GetSection(nameof(AdPointConfig)));
-                   services.Configure<AuthorizationConfig>(hostContext.Configuration.GetSection(nameof(AuthorizationConfig)));
+                   services.Configure<RabbitConfig>(configuration.GetSection(nameof(RabbitConfig)));
+                   services.Configure<AdPointConfig>(configuration.GetSection(nameof(AdPointConfig)));
+                   services.Configure<AuthorizationConfig>(configuration.GetSection(nameof(AuthorizationConfig)));
 
                    services.AddTransient<Form1>();
                });    

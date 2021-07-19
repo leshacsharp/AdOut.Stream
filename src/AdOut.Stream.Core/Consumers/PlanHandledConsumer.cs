@@ -27,17 +27,15 @@ namespace AdOut.Stream.Core.Consumers
             _mapper = mapper;
         }
 
-        //todo: refactor operations that are related with time
         protected override Task HandleAsync(PlanHandledEvent deliveredEvent)
         {
             //todo: refuse the event if the plan won't be played today
-            if (deliveredEvent.StartDateTime.Date != DateTime.Now.Date ||
-                deliveredEvent.CreatedDateUtc.Date != DateTime.Now.Date)
+            if (deliveredEvent.StartDateTime.ToLocalTime().Date != DateTime.Now.Date ||
+                deliveredEvent.CreatedDateUtc.ToLocalTime().Date != DateTime.Now.Date)
             {
                 return Task.CompletedTask;
             }
 
-            //todo: change time getters
             var newPlan = _mapper.Map<PlanTime>(deliveredEvent);
             var currentTimeLine = _adQueueService.RemainTimeBlocks;
 

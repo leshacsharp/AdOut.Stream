@@ -28,18 +28,18 @@ namespace AdOut.Stream.Planning.Client.Model
         public enum ScheduleType
     {
         /// <summary>
-        /// Enum _0 for value: 0
+        /// Enum Daily for value: Daily
         /// </summary>
-        [EnumMember(Value = "0")]
-        _0 = 1,
+        [EnumMember(Value = "Daily")]
+        Daily = 0,
         /// <summary>
-        /// Enum _1 for value: 1
+        /// Enum Weekly for value: Weekly
         /// </summary>
-        [EnumMember(Value = "1")]
-        _1 = 2,
+        [EnumMember(Value = "Weekly")]
+        Weekly = 1,
         /// <summary>
-        /// Enum _2 for value: 2
+        /// Enum Specific for value: Specific
         /// </summary>
-        [EnumMember(Value = "2")]
-        _2 = 3    }
+        [EnumMember(Value = "Specific")]
+        Specific = 2    }
 }

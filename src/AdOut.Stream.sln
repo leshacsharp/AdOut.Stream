@@ -18,6 +18,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{580A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdOut.Stream.Planning.Client", "AdOut.Stream.Planning.Client\AdOut.Stream.Planning.Client.csproj", "{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestForms", "TestForms\TestForms.csproj", "{A396E7FE-35F4-4F1C-8ABD-9030DAC0D97B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F1388BE-8B7A-4F2B-A7EA-79DF03B3FF41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A396E7FE-35F4-4F1C-8ABD-9030DAC0D97B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A396E7FE-35F4-4F1C-8ABD-9030DAC0D97B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A396E7FE-35F4-4F1C-8ABD-9030DAC0D97B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A396E7FE-35F4-4F1C-8ABD-9030DAC0D97B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

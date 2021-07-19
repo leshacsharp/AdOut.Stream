@@ -23,6 +23,8 @@ namespace AdOut.Stream.Core.Services
             return _currentTimeBlock;
         }
 
+
+        //todo: Cut the timeline by current local time.
         public void Configure(IEnumerable<TimeBlock> timeLine, bool modifyTimeLine = false)
         {
             if (modifyTimeLine)

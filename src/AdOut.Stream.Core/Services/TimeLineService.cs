@@ -39,7 +39,7 @@ namespace AdOut.Stream.Core.Services
         {
             if (!timeBlocks.Any())
             {
-                var gapForAllTime = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, startTimeLine, _config.EndWorking, true);
+                var gapForAllTime = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.DefaultAdType, startTimeLine, _config.EndWorking, true);
                 return new List<TimeBlock>() { gapForAllTime };
             }
 
@@ -49,7 +49,7 @@ namespace AdOut.Stream.Core.Services
 
             if (firstTimeBlock.Start > startTimeLine)
             {
-                var gapForStart = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, startTimeLine, firstTimeBlock.Start, true);
+                var gapForStart = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.DefaultAdType, startTimeLine, firstTimeBlock.Start, true);
                 timeLine.Add(gapForStart);
             }
 
@@ -58,7 +58,7 @@ namespace AdOut.Stream.Core.Services
 
             if (lastTimeBlock.End < _config.EndWorking)
             {
-                var gapForEnd = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, lastTimeBlock.End, _config.EndWorking, true);
+                var gapForEnd = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.DefaultAdType, lastTimeBlock.End, _config.EndWorking, true);
                 timeLine.Add(gapForEnd);
             }
 
@@ -74,7 +74,7 @@ namespace AdOut.Stream.Core.Services
             {
                 if (previousBlock != null && previousBlock.End != currentBlock.Start)
                 {
-                    var gap = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, previousBlock.End, currentBlock.Start, true);
+                    var gap = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.DefaultAdType, previousBlock.End, currentBlock.Start, true);
                     timeBlocksWithGaps.Add(gap);
                 }
                 timeBlocksWithGaps.Add(currentBlock);
@@ -97,7 +97,8 @@ namespace AdOut.Stream.Core.Services
             {
                 foreach (var timeRange in schedule.TimeRanges)
                 {
-                    var timeBlock = new TimeBlock(currentAdNode.Value.Title, currentAdNode.Value.Path, timeRange.Start, timeRange.End);
+                    var timeBlockAd = currentAdNode.Value;
+                    var timeBlock = new TimeBlock(timeBlockAd.Title, timeBlockAd.Path, timeBlockAd.ContentType, timeRange.Start, timeRange.End);
                     currentAdNode = currentAdNode.Next ?? adsCircle.First;
                     timeBlocks.Add(timeBlock);
                 }

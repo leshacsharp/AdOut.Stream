@@ -1,7 +1,9 @@
-﻿namespace AdOut.Stream.Model.Interfaces
+﻿using System.Threading.Tasks;
+
+namespace AdOut.Stream.Model.Interfaces
 {
     public interface IAdQueueRefresher
     {
-        void Start();
+        Task StartAsync();
     }
 }

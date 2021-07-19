@@ -1,13 +1,12 @@
-﻿using System;
+﻿using AdOut.Stream.Model.Models;
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace AdOut.Stream.Model.Interfaces
 {
     public interface IPlanService
     {
-        Task GetStreamPlansAsync(string adPointId, DateTime date);
+        Task<List<PlanTime>> GetPlanTimesAsync(DateTime date);
     }
 }
