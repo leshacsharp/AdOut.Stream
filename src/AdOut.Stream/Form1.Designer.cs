@@ -36,10 +36,10 @@ namespace AdOut.Stream
             // videoView1
             // 
             this.videoView1.BackColor = System.Drawing.Color.Black;
-            this.videoView1.Location = new System.Drawing.Point(690, 274);
+            this.videoView1.Location = new System.Drawing.Point(239, 44);
             this.videoView1.MediaPlayer = null;
             this.videoView1.Name = "videoView1";
-            this.videoView1.Size = new System.Drawing.Size(593, 359);
+            this.videoView1.Size = new System.Drawing.Size(621, 402);
             this.videoView1.TabIndex = 0;
             this.videoView1.Text = "videoView1";
             // 
@@ -47,10 +47,11 @@ namespace AdOut.Stream
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1627, 819);
+            this.ClientSize = new System.Drawing.Size(1127, 570);
             this.Controls.Add(this.videoView1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.videoView1)).EndInit();
             this.ResumeLayout(false);
