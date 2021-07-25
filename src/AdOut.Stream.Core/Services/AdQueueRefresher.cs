@@ -8,17 +8,17 @@ namespace AdOut.Stream.Core.Services
     public class AdQueueRefresher : IAdQueueRefresher, IDisposable
     {
         private readonly ITimeLineService _timeLineService;
-        private readonly IAdQueueService _adQueueService;
+        private readonly ITimeLineScheduler _timeLineScheduler;
         private readonly IPlanService _planService;
         private Timer _timer;
 
         public AdQueueRefresher(
             ITimeLineService timeLineService,
-            IAdQueueService adQueueService,
+            ITimeLineScheduler timeLineScheduler,
             IPlanService planService)
         {
             _timeLineService = timeLineService;
-            _adQueueService = adQueueService;
+            _timeLineScheduler = timeLineScheduler;
             _planService = planService;
         }
 
@@ -34,7 +34,7 @@ namespace AdOut.Stream.Core.Services
         {
             var plans = await _planService.GetPlanTimesAsync(DateTime.Now);
             var timeLine = _timeLineService.GenerateTimeLine(plans, DateTime.Now.Date);
-            _adQueueService.Configure(timeLine);   
+            _timeLineScheduler.Configure(timeLine);   
         }
 
         public void Dispose()

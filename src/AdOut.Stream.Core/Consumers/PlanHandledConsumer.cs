@@ -14,16 +14,16 @@ namespace AdOut.Stream.Core.Consumers
     {
         //todo: it's the scoped service
         private readonly ITimeLineService _timeLineService;
-        private readonly IAdQueueService _adQueueService;
+        private readonly ITimeLineScheduler _timeLineScheduler;
         private readonly IMapper _mapper;
 
         public PlanHandledConsumer(
             ITimeLineService timeLineService,
-            IAdQueueService adQueueService,
+            ITimeLineScheduler timeLineScheduler,
             IMapper mapper)
         {
             _timeLineService = timeLineService;
-            _adQueueService = adQueueService;
+            _timeLineScheduler = timeLineScheduler;
             _mapper = mapper;
         }
 
@@ -37,21 +37,21 @@ namespace AdOut.Stream.Core.Consumers
             }
 
             var newPlan = _mapper.Map<PlanTime>(deliveredEvent);
-            var currentTimeLine = _adQueueService.RemainTimeBlocks;
+            var currentTimeLine = _timeLineScheduler.RemainTimeBlocks;
 
             if (currentTimeLine.Any())
             {
-                var timeLineStart = _adQueueService.Current != null
-                    ? _adQueueService.Current.Gap ? DateTime.Now.TimeOfDay : _adQueueService.Current.End
+                var timeLineStart = _timeLineScheduler.Current != null
+                    ? _timeLineScheduler.Current.Gap ? DateTime.Now.TimeOfDay : _timeLineScheduler.Current.End
                     : currentTimeLine.First().Start;
 
                 var updatedTimeLine = _timeLineService.MergeTimeLine(currentTimeLine, newPlan, DateTime.Now.Date, timeLineStart);
-                _adQueueService.Configure(updatedTimeLine, true);
+                _timeLineScheduler.Configure(updatedTimeLine, true);
             }
             else
             {
                 var newTimeLine = _timeLineService.GenerateTimeLine(new List<PlanTime> { newPlan }, DateTime.Now.Date);
-                _adQueueService.Configure(newTimeLine);
+                _timeLineScheduler.Configure(newTimeLine);
             }
 
             return Task.CompletedTask;
