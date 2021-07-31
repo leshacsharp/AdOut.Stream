@@ -29,9 +29,8 @@ namespace AdOut.Stream.Core.Consumers
 
         protected override Task HandleAsync(PlanHandledEvent deliveredEvent)
         {
-            //todo: refuse the event if the plan won't be played today
-            if (deliveredEvent.StartDateTime.ToLocalTime().Date != DateTime.Now.Date ||
-                deliveredEvent.CreatedDateUtc.ToLocalTime().Date != DateTime.Now.Date)
+            var playPlanToday = deliveredEvent.Schedules.Any(s => s.Dates.Contains(DateTime.Now.Date));
+            if (!playPlanToday || deliveredEvent.CreatedDateUtc.ToLocalTime().Date != DateTime.Now.Date)          
             {
                 return Task.CompletedTask;
             }

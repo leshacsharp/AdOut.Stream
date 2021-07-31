@@ -87,7 +87,7 @@ namespace AdOut.Stream.Core.Services
         private List<TimeBlock> GenerateTimeAdBlocks(PlanTime plan, DateTime date)
         {
             var timeBlocks = new List<TimeBlock>();
-            var appropriateSchedules = plan.Schedules.Where(s => s.Dates.Any(d => d == date.Date)).ToList();
+            var appropriateSchedules = plan.Schedules.Where(s => s.Dates.Any(d => d.Date == date.Date)).ToList();
             var orderedAds = plan.Ads.OrderBy(a => a.Order);
 
             var adsCircle = new LinkedList<AdPlanTime>(orderedAds);

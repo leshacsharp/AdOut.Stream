@@ -29,6 +29,9 @@ namespace AdOut.Stream.Core.Services
         public async Task<List<PlanTime>> GetPlanTimesAsync(DateTime date)
         {
             var client = await _planApi.GetClientAsync();
+
+            //todo: we can't deserialize the api response to the client model. A cause is timespan models. 
+            //need to modify the Planning openapi file
             var models = await client.StreamPlansGetAsync(_config.Id, date);
             var planTimes = _mapper.Map<List<PlanTime>>(models);
             return planTimes;
