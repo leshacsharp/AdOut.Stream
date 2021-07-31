@@ -22,7 +22,7 @@ namespace AdOut.Stream.Core.Services
                                   .OrderBy(b => b.Start)
                                   .ToList();
 
-            return FillTimeLine(timeBlocks, _config.StartWorking);
+            return FillTimeLine(timeBlocks, _config.StartWorking, _config.EndWorking);
         }
    
         //for not gaps the startTime is CurrentTimeBlock.End, for gaps the startTimec is a day local time
@@ -32,14 +32,14 @@ namespace AdOut.Stream.Core.Services
             var planTimeBlocks = GenerateTimeAdBlocks(newPlan, date).Where(b => b.Start >= startTime);
             var mergedTimeBlocks = cleanTimeLineBlocks.Concat(planTimeBlocks).OrderBy(b => b.Start).ToList();
 
-            return FillTimeLine(mergedTimeBlocks, startTime);   
+            return FillTimeLine(mergedTimeBlocks, startTime, _config.EndWorking);   
         }
 
-        private List<TimeBlock> FillTimeLine(List<TimeBlock> timeBlocks, TimeSpan startTimeLine)
+        private List<TimeBlock> FillTimeLine(List<TimeBlock> timeBlocks, TimeSpan startTimeLine, TimeSpan endTimeLine)
         {
             if (!timeBlocks.Any())
             {
-                var gapForAllTime = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.DefaultAdType, startTimeLine, _config.EndWorking, true);
+                var gapForAllTime = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.DefaultAdType, startTimeLine, endTimeLine, true);
                 return new List<TimeBlock>() { gapForAllTime };
             }
 
@@ -56,9 +56,9 @@ namespace AdOut.Stream.Core.Services
             var timeBlocksWithGaps = IncludeGapsBetweenTimeBlocks(timeBlocks);
             timeLine.AddRange(timeBlocksWithGaps);
 
-            if (lastTimeBlock.End < _config.EndWorking)
+            if (lastTimeBlock.End < endTimeLine)
             {
-                var gapForEnd = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.DefaultAdType, lastTimeBlock.End, _config.EndWorking, true);
+                var gapForEnd = new TimeBlock(_config.DefaultAdTitle, _config.DefaultAdPath, _config.DefaultAdType, lastTimeBlock.End, endTimeLine, true);
                 timeLine.Add(gapForEnd);
             }
 

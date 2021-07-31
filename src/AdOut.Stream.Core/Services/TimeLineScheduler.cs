@@ -64,8 +64,9 @@ namespace AdOut.Stream.Core.Services
                     TimeBlockChanged(this, new TimeBlockChangedEventArgs(_currentTimeBlock));
                 }
                 else
-                {
+                {              
                     TimeLimeEnded(this, EventArgs.Empty);
+                    _currentTimeBlock = null;
                     _timer.Dispose();
                 }
             }
