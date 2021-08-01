@@ -123,22 +123,22 @@ namespace AdOut.Stream
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static async Task Main()
         { 
             var host = CreateHostBuilder().Build();
-            //using var scope = host.Services.CreateScope();
+            using var scope = host.Services.CreateScope();
 
-            //var adQueueRefresher = scope.ServiceProvider.GetRequiredService<IAdQueueRefresher>();
-            //var initializationTasks = scope.ServiceProvider.GetServices<IInitialization>();
+            var adQueueRefresher = scope.ServiceProvider.GetRequiredService<Model.Interfaces.ITimeLineRefresher>();
+            var initializationTasks = scope.ServiceProvider.GetServices<IInitialization>();
 
             //Test(scope.ServiceProvider.GetRequiredService<ITimeLineService>());
 
-           // foreach (var t in initializationTasks)
-            //{
-              //  await t.InitAsync();
-           // }
+            foreach (var t in initializationTasks)
+            {
+                await t.InitAsync();
+            }
 
-           // await adQueueRefresher.StartAsync();
+            await adQueueRefresher.StartAsync();
 
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
@@ -158,7 +158,7 @@ namespace AdOut.Stream
                    services.AddScoped<IInitialization, PlanHandledQueueInitialization>();
                    services.AddScoped<ITimeLineService, TimeLineService>();
                    services.AddScoped<ITimeLineScheduler, TimeLineScheduler>();
-                   services.AddScoped<IAdQueueRefresher, AdQueueRefresher>();
+                   services.AddScoped<ITimeLineRefresher, TimeLineRefresher>();
                    services.AddSingleton<IPlanHandledConsumer, PlanHandledConsumer>(); //TODO: mb should be scoped as other
                    services.AddScoped<IPlanService, PlanService>();
 

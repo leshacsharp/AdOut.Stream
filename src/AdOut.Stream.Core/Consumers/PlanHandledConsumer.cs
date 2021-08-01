@@ -6,7 +6,6 @@ using AutoMapper;
 using System;
 using System.Threading.Tasks;
 using System.Linq;
-using System.Collections.Generic;
 
 namespace AdOut.Stream.Core.Consumers
 {
@@ -38,7 +37,7 @@ namespace AdOut.Stream.Core.Consumers
             var newPlan = _mapper.Map<PlanTime>(deliveredEvent);
             var currentTimeLine = _timeLineScheduler.RemainTimeBlocks;
 
-            if (currentTimeLine.Any())
+            if (currentTimeLine.Any() || _timeLineScheduler.Current != null)
             {
                 var timeLineStart = _timeLineScheduler.Current != null
                     ? _timeLineScheduler.Current.Gap ? DateTime.Now.TimeOfDay : _timeLineScheduler.Current.End
@@ -46,11 +45,6 @@ namespace AdOut.Stream.Core.Consumers
 
                 var updatedTimeLine = _timeLineService.MergeTimeLine(currentTimeLine, newPlan, DateTime.Now.Date, timeLineStart);
                 _timeLineScheduler.Configure(updatedTimeLine, true);
-            }
-            else
-            {
-                var newTimeLine = _timeLineService.GenerateTimeLine(new List<PlanTime> { newPlan }, DateTime.Now.Date);
-                _timeLineScheduler.Configure(newTimeLine);
             }
 
             return Task.CompletedTask;
