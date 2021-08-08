@@ -11,7 +11,6 @@ namespace AdOut.Stream.Core.Consumers
 {
     public class PlanHandledConsumer : BaseConsumer<PlanHandledEvent>, IPlanHandledConsumer
     {
-        //todo: it's the scoped service
         private readonly ITimeLineService _timeLineService;
         private readonly ITimeLineScheduler _timeLineScheduler;
         private readonly IMapper _mapper;

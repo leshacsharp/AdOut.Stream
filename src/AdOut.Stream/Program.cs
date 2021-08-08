@@ -158,9 +158,9 @@ namespace AdOut.Stream
                    services.AddScoped<IInitialization, PlanHandledQueueInitialization>();
                    services.AddScoped<ITimeLineService, TimeLineService>();
                    services.AddScoped<ITimeLineScheduler, TimeLineScheduler>();
-                   services.AddScoped<ITimeLineRefresher, TimeLineRefresher>();
-                   services.AddSingleton<IPlanHandledConsumer, PlanHandledConsumer>(); //TODO: mb should be scoped as other
+                   services.AddScoped<ITimeLineRefresher, TimeLineRefresher>(); 
                    services.AddScoped<IPlanService, PlanService>();
+                   services.AddSingleton<IPlanHandledConsumer, PlanHandledConsumer>();
 
                    var serviceConfig = new ServiceConfiguration();
                    configuration.GetSection("Services:Planning").Bind(serviceConfig);
